@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>丁字裤今天说什么</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+<body>
+    <div class="container">
+        <div class="header-decoration">
+            <span class="pixel-icon">⚡</span>
+            <span class="title-text">丁字裤OS</span>
+            <span class="pixel-icon">⚡</span>
+        </div>
+        
+        <h1>
+            <span class="pixel-border">╔═══════════════════════════╗</span><br>
+            <span class="title-main">   圣 旨 生 成 器   </span><br>
+            <span class="pixel-border">╚═══════════════════════════╝</span>
+        </h1>
+        
+        <div class="poem-display">
+            <div class="corner-decoration top-left">╔</div>
+            <div class="corner-decoration top-right">╗</div>
+            <div class="corner-decoration bottom-left">╚</div>
+            <div class="corner-decoration bottom-right">╝</div>
+            
+            <div id="poem-text" class="poem-text">
+                <span class="prompt-text">>>> 获取随机圣旨 <<<</span>
+            </div>
+        </div>
+        
+        <div class="button-container">
+            <button id="generate-btn" class="generate-btn">
+                <span class="btn-icon">⚡</span>
+                获取随机圣旨
+                <span class="btn-icon">⚡</span>
+            </button>
+        </div>
+        
+        <div class="info">
+            <div class="info-line">
+                <span class="info-icon">►</span>
+                点击按钮从丁字裤中随机获取一句圣旨
+                <span class="info-icon">◄</span>
+            </div>
+            <div class="controls-info">
+                <span class="key-hint">[SPACE]</span> 快速生成 | 
+                <span class="key-hint">[CLICK]</span> 鼠标点击<br>
+                <span class="key-hint">[ESC]</span> CRT重启 | 
+                <span class="key-hint">[F]</span> 强化扫描
+            </div>
+        </div>
+        
+        <div class="footer-decoration">
+            <span class="pixel-line">════════════════════════════════════</span>
+        </div>
+    </div>
+    
+    <script>
+        // 全局错误处理，防止外部脚本错误影响页面功能
+        window.addEventListener('error', function(event) {
+            // 如果是pre.js的错误，直接忽略
+            if (event.filename && event.filename.includes('pre.js')) {
+                console.warn('忽略pre.js错误:', event.message);
+                event.preventDefault();
+                return false;
+            }
+        });
+        
+        // 防止未捕获的Promise错误
+        window.addEventListener('unhandledrejection', function(event) {
+            console.warn('未处理的Promise错误:', event.reason);
+        });
+    </script>
+    
+    <script src="script.js"></script>
+</body>
+</html> 

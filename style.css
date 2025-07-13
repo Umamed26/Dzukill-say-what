@@ -1,0 +1,1100 @@
+/* 导入像素字体 */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+    background: 
+        radial-gradient(ellipse at center, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.9) 70%, #000 100%),
+        linear-gradient(135deg, #8B4513 0%, #D2691E 25%, #CD853F 50%, #DEB887 75%, #F4A460 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FFD700;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    overflow: hidden;
+    position: relative;
+    /* 移动端优化 */
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    /* 硬件加速 */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+/* CRT屏幕效果 */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        /* 扫描线 */
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 255, 0, 0.03) 2px,
+            rgba(0, 255, 0, 0.03) 4px
+        ),
+        /* 垂直扫描线 */
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 1px,
+            rgba(0, 255, 0, 0.01) 1px,
+            rgba(0, 255, 0, 0.01) 2px
+        );
+    pointer-events: none;
+    z-index: 1000;
+    animation: scanlines 0.1s linear infinite;
+}
+
+/* CRT弯曲效果 */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(ellipse at center, 
+            transparent 0%, 
+            transparent 70%, 
+            rgba(0, 0, 0, 0.1) 80%, 
+            rgba(0, 0, 0, 0.3) 90%, 
+            rgba(0, 0, 0, 0.6) 100%
+        );
+    pointer-events: none;
+    z-index: 999;
+    border-radius: 15px;
+    box-shadow: 
+        inset 0 0 100px rgba(0, 0, 0, 0.3),
+        inset 0 0 200px rgba(0, 0, 0, 0.2);
+}
+
+/* 主容器样式 */
+.container {
+    background: 
+        linear-gradient(135deg, #654321 0%, #8B4513 25%, #A0522D 50%, #CD853F 75%, #D2691E 100%),
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 255, 0, 0.02) 2px,
+            rgba(0, 255, 0, 0.02) 4px
+        );
+    border: 4px solid #FFD700;
+    border-radius: 0;
+    box-shadow: 
+        inset 0 0 0 2px #8B4513,
+        inset 0 0 0 4px #FFD700,
+        0 0 20px rgba(255, 215, 0, 0.3),
+        0 8px 16px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(255, 215, 0, 0.1);
+    padding: 30px;
+    max-width: 800px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+    animation: crtFlicker 0.15s ease-in-out infinite alternate;
+}
+
+/* 像素化纹理效果 */
+.container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.1) 2px,
+            rgba(0, 0, 0, 0.1) 4px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.1) 2px,
+            rgba(0, 0, 0, 0.1) 4px
+        );
+    pointer-events: none;
+}
+
+/* 顶部状态栏 */
+.container::after {
+    content: '⚡ 0                                    丁字裤圣旨系统 ⚡';
+    position: absolute;
+    top: -40px;
+    left: 0;
+    right: 0;
+    height: 35px;
+    background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+    border: 2px solid #FFD700;
+    color: #FFD700;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 2px;
+}
+
+/* 标题样式 */
+h1 {
+    color: #FFD700;
+    font-size: 24px;
+    margin-bottom: 30px;
+    font-weight: normal;
+    letter-spacing: 3px;
+    text-shadow: 
+        0 0 5px #FFD700,
+        0 0 10px #FFD700,
+        0 0 15px #FFD700,
+        2px 2px 0px #8B4513,
+        4px 4px 0px rgba(0, 0, 0, 0.5);
+    line-height: 1.5;
+    animation: crtGlow 2s ease-in-out infinite, crtDistortion 0.2s ease-in-out infinite;
+}
+
+/* 圣旨显示区域 */
+.poem-display {
+    background: linear-gradient(135deg, #2F1B14 0%, #4A2C2A 100%);
+    border: 3px solid #FFD700;
+    border-radius: 0;
+    padding: 25px;
+    margin: 25px 0;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 
+        inset 0 0 0 1px #8B4513,
+        inset 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+/* 添加装饰性边角 */
+.poem-display::before {
+    content: '╔';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    color: #FFD700;
+    font-size: 16px;
+}
+
+.poem-display::after {
+    content: '╗';
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    color: #FFD700;
+    font-size: 16px;
+}
+
+/* 圣旨文本样式 */
+.poem-text {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #FFD700;
+    font-weight: normal;
+    letter-spacing: 2px;
+    text-shadow: 
+        0 0 3px #FFD700,
+        0 0 6px #FFD700,
+        1px 1px 0px #8B4513;
+    max-width: 100%;
+    word-wrap: break-word;
+    animation: crtDistortion 0.3s ease-in-out infinite;
+}
+
+/* 按钮样式 */
+.generate-btn {
+    background: linear-gradient(135deg, #8B4513 0%, #A0522D 50%, #CD853F 100%);
+    color: #FFD700;
+    border: 3px solid #FFD700;
+    padding: 15px 25px;
+    font-size: 14px;
+    border-radius: 0;
+    cursor: pointer;
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+    font-weight: normal;
+    letter-spacing: 1px;
+    text-shadow: 
+        0 0 3px #FFD700,
+        0 0 6px #FFD700,
+        1px 1px 0px #8B4513;
+    box-shadow: 
+        inset 0 0 0 1px #8B4513,
+        0 4px 8px rgba(0, 0, 0, 0.3),
+        0 0 10px rgba(255, 215, 0, 0.2);
+    transition: all 0.1s ease;
+    position: relative;
+    animation: crtDistortion 0.4s ease-in-out infinite;
+    /* 移动端触摸优化 */
+    -webkit-tap-highlight-color: rgba(255, 215, 0, 0.3);
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.generate-btn:hover {
+    background: linear-gradient(135deg, #A0522D 0%, #CD853F 50%, #DEB887 100%);
+    transform: translateY(-2px);
+    box-shadow: 
+        inset 0 0 0 1px #8B4513,
+        0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.generate-btn:active {
+    transform: translateY(0);
+    box-shadow: 
+        inset 0 0 0 1px #8B4513,
+        0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* 移动端触摸状态 */
+.generate-btn:active,
+.generate-btn.active {
+    background: linear-gradient(135deg, #A0522D 0%, #CD853F 50%, #DEB887 100%);
+    transform: translateY(1px);
+    box-shadow: 
+        inset 0 0 0 1px #8B4513,
+        0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.generate-btn:disabled {
+    background: #666;
+    color: #999;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* 信息文本样式 */
+.info {
+    margin-top: 20px;
+    color: #FFFF00;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-shadow: 
+        0 0 8px #FFFF00,
+        0 0 12px #FFFF00,
+        0 0 16px #FFFF00,
+        2px 2px 0px #000000,
+        3px 3px 0px rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px 15px;
+    border-radius: 3px;
+    border: 1px solid #FFFF00;
+}
+
+/* 移动端适配 - 小屏幕 */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    .container {
+        padding: 15px;
+        margin: 10px 5px;
+        max-width: 100%;
+        width: 95%;
+    }
+    
+    .container::after {
+        font-size: 9px;
+        content: '⚡ 丁字裤圣旨系统 ⚡';
+        height: 30px;
+        top: -35px;
+    }
+    
+    h1 {
+        font-size: 16px;
+        letter-spacing: 1px;
+        margin-bottom: 20px;
+    }
+    
+    .poem-display {
+        padding: 15px;
+        margin: 20px 0;
+        min-height: 100px;
+    }
+    
+    .poem-text {
+        font-size: 13px;
+        letter-spacing: 1px;
+        line-height: 1.6;
+    }
+    
+    .generate-btn {
+        padding: 12px 20px;
+        font-size: 12px;
+        width: 100%;
+        max-width: 280px;
+    }
+    
+    .info {
+        font-size: 14px;
+        padding: 8px 12px;
+        margin-top: 15px;
+    }
+    
+    .controls-info {
+        font-size: 13px;
+        padding: 6px 10px;
+    }
+    
+    .key-hint {
+        font-size: 11px;
+        padding: 4px 8px;
+        margin: 0 2px;
+    }
+    
+    .pixel-line {
+        font-size: 14px;
+    }
+}
+
+/* 加载动画 */
+.loading {
+    animation: pixelPulse 1s ease-in-out infinite;
+}
+
+@keyframes pixelPulse {
+    0% { 
+        opacity: 1;
+        text-shadow: 1px 1px 0px #8B4513;
+    }
+    50% { 
+        opacity: 0.5;
+        text-shadow: 2px 2px 0px #8B4513;
+    }
+    100% { 
+        opacity: 1;
+        text-shadow: 1px 1px 0px #8B4513;
+    }
+}
+
+/* 淡入动画 */
+.fade-in {
+    animation: pixelFadeIn 0.3s ease-in;
+}
+
+@keyframes pixelFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+        text-shadow: none;
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        text-shadow: 1px 1px 0px #8B4513;
+    }
+}
+
+/* CRT动画效果 */
+@keyframes scanlines {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 0 4px;
+    }
+}
+
+@keyframes crtFlicker {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    2% {
+        opacity: 0.98;
+        transform: scale(1.001);
+    }
+    4% {
+        opacity: 0.99;
+        transform: scale(0.999);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes crtGlow {
+    0%, 100% {
+        text-shadow: 
+            0 0 5px currentColor,
+            0 0 10px currentColor,
+            0 0 15px currentColor,
+            2px 2px 0px #8B4513;
+    }
+    50% {
+        text-shadow: 
+            0 0 3px currentColor,
+            0 0 7px currentColor,
+            0 0 12px currentColor,
+            2px 2px 0px #8B4513;
+    }
+}
+
+@keyframes crtDistortion {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    20% {
+        transform: translateX(0.5px);
+    }
+    40% {
+        transform: translateX(-0.5px);
+    }
+    60% {
+        transform: translateX(0.5px);
+    }
+    80% {
+        transform: translateX(-0.5px);
+    }
+}
+
+/* 鼠标悬停效果 */
+.poem-display:hover {
+    box-shadow: 
+        inset 0 0 0 1px #8B4513,
+        inset 0 0 20px rgba(0, 0, 0, 0.5),
+        0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+/* 头部装饰 */
+.header-decoration {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.pixel-icon {
+    font-size: 20px;
+    color: #FFD700;
+    text-shadow: 
+        0 0 5px #FFD700,
+        0 0 10px #FFD700,
+        0 0 15px #FFD700,
+        2px 2px 0px #8B4513;
+    animation: pixelGlow 2s ease-in-out infinite, crtGlow 1s ease-in-out infinite;
+}
+
+.title-text {
+    font-size: 14px;
+    color: #FFD700;
+    letter-spacing: 2px;
+    text-shadow: 
+        0 0 3px #FFD700,
+        0 0 6px #FFD700,
+        1px 1px 0px #8B4513;
+}
+
+@keyframes pixelGlow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* 标题边框 */
+.pixel-border {
+    color: #FFD700;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 0px #8B4513;
+    line-height: 1.2;
+}
+
+.title-main {
+    color: #FFD700;
+    font-size: 18px;
+    letter-spacing: 4px;
+    text-shadow: 
+        2px 2px 0px #8B4513,
+        4px 4px 0px rgba(0, 0, 0, 0.5);
+    margin: 8px 0;
+    display: inline-block;
+}
+
+/* 角落装饰 */
+.corner-decoration {
+    position: absolute;
+    color: #FFD700;
+    font-size: 18px;
+    font-weight: bold;
+    text-shadow: 1px 1px 0px #8B4513;
+    z-index: 1;
+}
+
+.top-left { top: -2px; left: -2px; }
+.top-right { top: -2px; right: -2px; }
+.bottom-left { bottom: -2px; left: -2px; }
+.bottom-right { bottom: -2px; right: -2px; }
+
+/* 提示文本 */
+.prompt-text {
+    color: #DEB887;
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-shadow: 1px 1px 0px #8B4513;
+    animation: pixelBlink 1.5s ease-in-out infinite;
+}
+
+/* 圣旨内容样式 */
+.poem-content {
+    color: #FFD700;
+    font-size: 16px;
+    letter-spacing: 3px;
+    text-shadow: 
+        0 0 5px #FFD700,
+        0 0 10px #FFD700,
+        0 0 15px #FFD700,
+        2px 2px 0px #8B4513,
+        0 0 20px rgba(255, 215, 0, 0.5);
+    line-height: 1.8;
+    display: inline-block;
+    padding: 10px 15px;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-radius: 0;
+    background: rgba(139, 69, 19, 0.2);
+    animation: poemGlow 3s ease-in-out infinite, crtGlow 1.5s ease-in-out infinite;
+}
+
+@keyframes poemGlow {
+    0%, 100% { 
+        box-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+    }
+    50% { 
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+    }
+}
+
+@keyframes pixelBlink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0.6; }
+}
+
+/* 按钮容器 */
+.button-container {
+    margin: 25px 0;
+}
+
+.btn-icon {
+    font-size: 12px;
+    margin: 0 5px;
+    animation: pixelSpark 1s ease-in-out infinite;
+}
+
+@keyframes pixelSpark {
+    0%, 100% { 
+        opacity: 1; 
+        transform: scale(1);
+    }
+    50% { 
+        opacity: 0.8; 
+        transform: scale(1.1);
+    }
+}
+
+/* 信息区域样式 */
+.info-line {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 8px 15px;
+    border-radius: 3px;
+    border: 1px solid #FFFF00;
+}
+
+.info-icon {
+    color: #FFFF00;
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: 
+        0 0 6px #FFFF00,
+        0 0 10px #FFFF00,
+        1px 1px 0px #000000;
+    animation: pixelMove 2s ease-in-out infinite;
+}
+
+@keyframes pixelMove {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(2px); }
+}
+
+.controls-info {
+    margin-top: 8px;
+    font-size: 15px;
+    color: #FFFFFF;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-shadow: 
+        0 0 6px #FFFFFF,
+        0 0 10px #FFFFFF,
+        0 0 14px #FFFFFF,
+        2px 2px 0px #000000,
+        3px 3px 0px rgba(0, 0, 0, 0.9);
+    line-height: 1.8;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 8px 12px;
+    border-radius: 3px;
+    border: 1px solid #FFFFFF;
+}
+
+.key-hint {
+    background: #000000;
+    color: #00FF00;
+    padding: 6px 12px;
+    border: 2px solid #00FF00;
+    border-radius: 0;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0 5px;
+    text-shadow: 
+        0 0 4px #00FF00,
+        0 0 8px #00FF00,
+        0 0 12px #00FF00,
+        1px 1px 0px #000000;
+    box-shadow: 
+        0 0 8px rgba(0, 255, 0, 0.5),
+        inset 0 0 5px rgba(0, 255, 0, 0.3);
+}
+
+/* 底部装饰 */
+.footer-decoration {
+    margin-top: 20px;
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px 15px;
+    border-radius: 3px;
+    border: 1px solid #FFFF00;
+}
+
+.pixel-line {
+    color: #FFFF00;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-shadow: 
+        0 0 6px #FFFF00,
+        0 0 10px #FFFF00,
+        0 0 14px #FFFF00,
+        2px 2px 0px #000000;
+}
+
+/* 移动端装饰元素适配 */
+@media (max-width: 768px) {
+    .header-decoration {
+        margin-bottom: 12px;
+        gap: 8px;
+    }
+    
+    .pixel-icon {
+        font-size: 14px;
+    }
+    
+    .title-text {
+        font-size: 11px;
+    }
+    
+    .pixel-border {
+        font-size: 11px;
+    }
+    
+    .title-main {
+        font-size: 14px;
+        letter-spacing: 2px;
+    }
+    
+    .corner-decoration {
+        font-size: 14px;
+    }
+    
+    .prompt-text {
+        font-size: 12px;
+    }
+    
+    .poem-content {
+        font-size: 13px;
+        letter-spacing: 1px;
+        padding: 8px 12px;
+    }
+    
+    .btn-icon {
+        font-size: 10px;
+    }
+    
+    .info {
+        font-size: 14px;
+    }
+    
+    .controls-info {
+        font-size: 13px;
+        line-height: 1.5;
+    }
+    
+    .key-hint {
+        font-size: 11px;
+        padding: 4px 8px;
+        margin: 0 2px;
+    }
+    
+    .pixel-line {
+        font-size: 14px;
+    }
+    
+    .button-container {
+        margin: 20px 0;
+    }
+    
+    .footer-decoration {
+        margin-top: 15px;
+        padding: 8px 12px;
+    }
+}
+
+/* CRT关机效果 */
+.crt-shutdown {
+    animation: crtShutdown 0.5s ease-in-out forwards;
+}
+
+@keyframes crtShutdown {
+    0% {
+        transform: scale(1, 1);
+        opacity: 1;
+    }
+    25% {
+        transform: scale(1, 0.8);
+        opacity: 0.8;
+    }
+    50% {
+        transform: scale(1, 0.3);
+        opacity: 0.5;
+    }
+    75% {
+        transform: scale(1, 0.1);
+        opacity: 0.2;
+    }
+    100% {
+        transform: scale(1, 0.01);
+        opacity: 0;
+    }
+}
+
+/* CRT开机效果 */
+.crt-startup {
+    animation: crtStartup 0.8s ease-out forwards;
+}
+
+@keyframes crtStartup {
+    0% {
+        transform: scale(1, 0.01);
+        opacity: 0;
+    }
+    25% {
+        transform: scale(1, 0.1);
+        opacity: 0.2;
+    }
+    50% {
+        transform: scale(1, 0.3);
+        opacity: 0.5;
+    }
+    75% {
+        transform: scale(1, 0.8);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1, 1);
+        opacity: 1;
+    }
+}
+
+/* 增强扫描线效果 */
+.crt-intense-scan {
+    animation: intenseScan 0.1s linear infinite;
+}
+
+@keyframes intenseScan {
+    0% {
+        filter: brightness(1) contrast(1);
+    }
+    50% {
+        filter: brightness(1.1) contrast(1.1);
+    }
+    100% {
+        filter: brightness(1) contrast(1);
+    }
+}
+
+/* 小屏幕手机适配 (480px以下) */
+@media (max-width: 480px) {
+    .container {
+        padding: 12px;
+        margin: 5px 2px;
+        width: 98%;
+    }
+    
+    .container::after {
+        font-size: 8px;
+        height: 25px;
+        top: -30px;
+        content: '⚡ 丁字裤圣旨 ⚡';
+    }
+    
+    h1 {
+        font-size: 14px;
+        letter-spacing: 1px;
+        margin-bottom: 15px;
+    }
+    
+    .title-main {
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+    
+    .pixel-border {
+        font-size: 10px;
+    }
+    
+    .poem-display {
+        padding: 12px;
+        margin: 15px 0;
+        min-height: 80px;
+    }
+    
+    .poem-text {
+        font-size: 12px;
+        line-height: 1.5;
+    }
+    
+    .poem-content {
+        font-size: 12px;
+        letter-spacing: 0.5px;
+        padding: 6px 10px;
+    }
+    
+    .generate-btn {
+        padding: 10px 15px;
+        font-size: 11px;
+        width: 100%;
+        max-width: 250px;
+    }
+    
+    .info {
+        font-size: 13px;
+        padding: 6px 10px;
+    }
+    
+    .controls-info {
+        font-size: 12px;
+        padding: 5px 8px;
+        line-height: 1.4;
+    }
+    
+    .key-hint {
+        font-size: 10px;
+        padding: 3px 6px;
+        margin: 0 1px;
+    }
+    
+    .pixel-line {
+        font-size: 13px;
+    }
+    
+    .header-decoration {
+        margin-bottom: 10px;
+        gap: 6px;
+    }
+    
+    .pixel-icon {
+        font-size: 12px;
+    }
+    
+    .title-text {
+        font-size: 10px;
+    }
+    
+    .corner-decoration {
+        font-size: 12px;
+    }
+    
+    .btn-icon {
+        font-size: 9px;
+    }
+    
+    .info-icon {
+        font-size: 14px;
+    }
+    
+    .footer-decoration {
+        margin-top: 12px;
+        padding: 6px 10px;
+    }
+}
+
+/* 平板设备适配 (768px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .container {
+        padding: 35px;
+        max-width: 700px;
+    }
+    
+    .container::after {
+        font-size: 11px;
+        height: 32px;
+        top: -37px;
+    }
+    
+    h1 {
+        font-size: 22px;
+        letter-spacing: 2px;
+    }
+    
+    .poem-display {
+        padding: 25px;
+        margin: 25px 0;
+        min-height: 110px;
+    }
+    
+    .poem-text {
+        font-size: 15px;
+        letter-spacing: 1.5px;
+    }
+    
+    .poem-content {
+        font-size: 15px;
+        letter-spacing: 2px;
+        padding: 12px 18px;
+    }
+    
+    .generate-btn {
+        padding: 16px 28px;
+        font-size: 15px;
+        max-width: 320px;
+    }
+    
+    .info {
+        font-size: 17px;
+        padding: 12px 18px;
+    }
+    
+    .controls-info {
+        font-size: 16px;
+        padding: 10px 15px;
+    }
+    
+    .key-hint {
+        font-size: 15px;
+        padding: 7px 14px;
+        margin: 0 6px;
+    }
+    
+    .pixel-line {
+        font-size: 17px;
+    }
+}
+
+/* 触屏设备优化 */
+@media (pointer: coarse) {
+    .generate-btn {
+        min-height: 44px;
+        touch-action: manipulation;
+    }
+    
+    .key-hint {
+        min-height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* 禁用CRT抖动效果以提升移动端性能 */
+    .container {
+        animation: none;
+    }
+    
+    h1 {
+        animation: crtGlow 2s ease-in-out infinite;
+    }
+    
+    .poem-text {
+        animation: none;
+    }
+    
+    .generate-btn {
+        animation: none;
+    }
+}
+
+/* 横屏模式优化 */
+@media (orientation: landscape) and (max-height: 500px) {
+    .container {
+        padding: 15px;
+        margin: 5px;
+    }
+    
+    .container::after {
+        display: none;
+    }
+    
+    h1 {
+        font-size: 16px;
+        margin-bottom: 15px;
+    }
+    
+    .poem-display {
+        margin: 15px 0;
+        min-height: 60px;
+        padding: 15px;
+    }
+    
+    .info {
+        margin-top: 15px;
+    }
+    
+    .footer-decoration {
+        margin-top: 10px;
+    }
+}
+
+/* 选择文本时的颜色 */
+::selection {
+    background: #FFD700;
+    color: #8B4513;
+}
+
+::-moz-selection {
+    background: #FFD700;
+    color: #8B4513;
+} 
