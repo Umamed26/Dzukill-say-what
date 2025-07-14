@@ -41,6 +41,16 @@
                 获取随机圣旨
                 <span class="btn-icon">⚡</span>
             </button>
+            <button id="copy-btn" class="copy-btn" disabled>
+                <span class="btn-icon">📋</span>
+                复制圣旨
+                <span class="btn-icon">📋</span>
+            </button>
+            <button id="show-all-btn" class="show-all-btn">
+                <span class="btn-icon">📜</span>
+                查看所有圣旨
+                <span class="btn-icon">📜</span>
+            </button>
         </div>
         
         <div class="info">
@@ -52,6 +62,8 @@
             <div class="controls-info">
                 <span class="key-hint">[SPACE]</span> 快速生成 | 
                 <span class="key-hint">[CLICK]</span> 鼠标点击<br>
+                <span class="key-hint">[CTRL+C]</span> 复制圣旨 | 
+                <span class="key-hint">[V]</span> 查看所有 | 
                 <span class="key-hint">[ESC]</span> CRT重启 | 
                 <span class="key-hint">[F]</span> 强化扫描
             </div>
@@ -59,6 +71,47 @@
         
         <div class="footer-decoration">
             <span class="pixel-line">════════════════════════════════════</span>
+        </div>
+    </div>
+    
+    <!-- 圣旨列表模态窗口 -->
+    <div id="poem-modal" class="poem-modal hidden">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <span class="pixel-border">╔══════════════════════════════════╗</span><br>
+                    <span class="modal-title-main">   丁字裤圣旨大全   </span><br>
+                    <span class="pixel-border">╚══════════════════════════════════╝</span>
+                </h2>
+                <button id="close-modal-btn" class="close-modal-btn">
+                    <span class="btn-icon">✖</span>
+                </button>
+            </div>
+            
+            <div class="modal-toolbar">
+                <div class="modal-stats">
+                    <span class="stats-text">总计: <span id="total-poems">0</span> 条圣旨</span>
+                </div>
+                <div class="modal-actions">
+                    <button id="copy-all-btn" class="copy-all-btn">
+                        <span class="btn-icon">📋</span>
+                        复制所有圣旨
+                        <span class="btn-icon">📋</span>
+                    </button>
+                    <button id="export-txt-btn" class="export-btn">
+                        <span class="btn-icon">💾</span>
+                        导出TXT
+                        <span class="btn-icon">💾</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="modal-body">
+                <div id="poems-list" class="poems-list">
+                    <!-- 圣旨列表将在这里动态生成 -->
+                </div>
+            </div>
         </div>
     </div>
     
