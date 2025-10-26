@@ -1,6 +1,7 @@
 /**
  * 随机圣旨生成器
  * 从tang.txt文件中随机抽取一行圣旨显示
+ * 支持解析 | 符号后的作者信息
  */
 
 class PoemGenerator {
@@ -19,6 +20,7 @@ class PoemGenerator {
         
         this.poems = []; // 存储所有圣旨的数组
         this.currentPoem = ''; // 存储当前显示的圣旨
+        this.currentAuthor = ''; // 存储当前作者
         
         // 绑定事件监听器
         this.bindEvents();
@@ -157,6 +159,27 @@ class PoemGenerator {
     }
     
     /**
+     * 解析圣旨行，分离内容和作者
+     * @param {string} line - 原始行文本
+     * @returns {Object} 包含text和author的对象
+     */
+    parsePoemLine(line) {
+        // (*** 已修改 ***)
+        // 使用正则表达式匹配 | 符号，支持前后可能有空格
+        const parts = line.split(/\s*\|\s*/);
+        
+        if (parts.length >= 2) {
+            // 如果有 | 符号，最后一个部分作为作者，其余部分作为内容
+            const author = parts.pop().trim();
+            const text = parts.join('|').trim(); // 重新连接剩余部分，保留原始格式
+            return { text, author };
+        } else {
+            // 没有 | 符号，只有内容，作者为空
+            return { text: line.trim(), author: '' };
+        }
+    }
+    
+    /**
      * 从tang.txt文件加载圣旨数据
      */
     async loadPoems() {
@@ -173,10 +196,11 @@ class PoemGenerator {
             
             const text = await response.text();
             
-            // 将文本按行分割，并过滤掉空行
+            // 将文本按行分割，并过滤掉空行，然后解析每行
             this.poems = text.split('\n')
                 .map(line => line.trim())
-                .filter(line => line.length > 0);
+                .filter(line => line.length > 0)
+                .map(line => this.parsePoemLine(line));
             
             console.log(`成功加载 ${this.poems.length} 句圣旨`);
             
@@ -219,13 +243,13 @@ class PoemGenerator {
             const randomPoem = this.poems[randomIndex];
             
             // 显示圣旨
-            this.displayPoem(randomPoem);
+            this.displayPoem(randomPoem.text, randomPoem.author);
             
             // 隐藏加载动画
             this.hideLoading();
             
             // 记录日志
-            console.log(`显示第 ${randomIndex + 1} 首圣旨: ${randomPoem}`);
+            console.log(`显示第 ${randomIndex + 1} 首圣旨: ${randomPoem.text}${randomPoem.author ? ' - ' + randomPoem.author : ''}`);
             
         }, 300); // 300毫秒延迟
     }
@@ -233,14 +257,24 @@ class PoemGenerator {
     /**
      * 显示圣旨
      * @param {string} poem - 要显示的圣旨
+     * @param {string} author - 作者信息
      */
-    displayPoem(poem) {
-        // 存储当前圣旨
+    displayPoem(poem, author = '') {
+        // 存储当前圣旨和作者
         this.currentPoem = poem;
+        this.currentAuthor = author;
         
         // 添加淡入动画效果
         this.poemText.classList.remove('fade-in');
-        this.poemText.innerHTML = `<span class="poem-content">『 ${poem} 』</span>`;
+        
+        // 构建显示内容
+        let displayHTML = `<span class="poem-content">『 ${poem} 』</span>`;
+        if (author) {
+            // (*** 已修改 ***) - 添加了 .poem-author div
+            displayHTML += `<div class="poem-author">—— ${author}</div>`;
+        }
+        
+        this.poemText.innerHTML = displayHTML;
         
         // 强制重绘，然后添加动画类
         this.poemText.offsetHeight;
@@ -250,7 +284,7 @@ class PoemGenerator {
         this.copyBtn.disabled = false;
         this.copyBtn.classList.remove('disabled');
         
-        console.log(`圣旨显示完成，已启用复制功能: ${poem}`);
+        console.log(`圣旨显示完成，已启用复制功能: ${poem}${author ? ' - ' + author : ''}`);
     }
     
     /**
@@ -283,20 +317,26 @@ class PoemGenerator {
             return;
         }
         
+        // 构建复制文本，包含作者信息
+        let copyText = this.currentPoem;
+        if (this.currentAuthor) {
+            copyText += ` ——${this.currentAuthor}`;
+        }
+        
         try {
             // 使用现代剪贴板API
             if (navigator.clipboard && window.isSecureContext) {
-                await navigator.clipboard.writeText(this.currentPoem);
-                console.log('使用Clipboard API复制成功:', this.currentPoem);
+                await navigator.clipboard.writeText(copyText);
+                console.log('使用Clipboard API复制成功:', copyText);
                 this.showCopyFeedback('复制成功!', true);
             } else {
                 // 降级到传统方法
-                this.fallbackCopyToClipboard(this.currentPoem);
+                this.fallbackCopyToClipboard(copyText);
             }
         } catch (error) {
             console.error('复制失败:', error);
             // 尝试降级方法
-            this.fallbackCopyToClipboard(this.currentPoem);
+            this.fallbackCopyToClipboard(copyText);
         }
     }
     
@@ -409,27 +449,37 @@ class PoemGenerator {
         this.poemsList.innerHTML = '';
         
         // 为每条圣旨创建列表项
-        this.poems.forEach((poem, index) => {
+        this.poems.forEach((poemObj, index) => {
             const poemItem = document.createElement('div');
             poemItem.className = 'poem-item';
+            
+            // 构建内容HTML
+            let contentHTML = `<div class="poem-item-content">
+                <span class="poem-item-text">『 ${poemObj.text} 』</span>`;
+            
+            if (poemObj.author) {
+                // (*** 已修改 ***) - 添加了 .poem-item-author div
+                contentHTML += `<div class="poem-item-author">—— ${poemObj.author}</div>`;
+            }
+            
+            contentHTML += `</div>`;
+            
             poemItem.innerHTML = `
                 <div class="poem-item-header">
                     <span class="poem-number">#${String(index + 1).padStart(3, '0')}</span>
-                    <button class="poem-copy-btn" data-poem="${poem}" data-index="${index}">
+                    <button class="poem-copy-btn" data-poem="${poemObj.text}" data-author="${poemObj.author}" data-index="${index}">
                         <span class="btn-icon">📋</span>
                         复制
                     </button>
                 </div>
-                <div class="poem-item-content">
-                    <span class="poem-item-text">『 ${poem} 』</span>
-                </div>
+                ${contentHTML}
             `;
             
             // 为复制按钮添加事件监听器
             const copyBtn = poemItem.querySelector('.poem-copy-btn');
             copyBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                this.copySinglePoem(poem, index + 1, copyBtn);
+                this.copySinglePoem(poemObj.text, poemObj.author, index + 1, copyBtn);
             });
             
             this.poemsList.appendChild(poemItem);
@@ -441,19 +491,26 @@ class PoemGenerator {
     /**
      * 复制单条圣旨
      * @param {string} poem - 要复制的圣旨
+     * @param {string} author - 作者信息
      * @param {number} number - 圣旨编号
      * @param {HTMLElement} button - 触发复制的按钮
      */
-    async copySinglePoem(poem, number, button) {
+    async copySinglePoem(poem, author, number, button) {
+        // 构建复制文本
+        let copyText = poem;
+        if (author) {
+            copyText += ` ——${author}`;
+        }
+        
         try {
             // 使用现代剪贴板API
             if (navigator.clipboard && window.isSecureContext) {
-                await navigator.clipboard.writeText(poem);
-                console.log(`使用Clipboard API复制第${number}条圣旨成功:`, poem);
+                await navigator.clipboard.writeText(copyText);
+                console.log(`使用Clipboard API复制第${number}条圣旨成功:`, copyText);
                 this.showPoemCopyFeedback(button, '已复制!', true);
             } else {
                 // 降级到传统方法
-                this.fallbackCopyToClipboard(poem);
+                this.fallbackCopyToClipboard(copyText);
                 this.showPoemCopyFeedback(button, '已复制!', true);
             }
         } catch (error) {
@@ -471,10 +528,14 @@ class PoemGenerator {
             return;
         }
         
-        // 将所有圣旨组合成一个字符串
-        const allPoemsText = this.poems.map((poem, index) => 
-            `${index + 1}. ${poem}`
-        ).join('\n\n');
+        // 将所有圣旨组合成一个字符串，包含作者信息
+        const allPoemsText = this.poems.map((poemObj, index) => {
+            let line = `${index + 1}. ${poemObj.text}`;
+            if (poemObj.author) {
+                line += ` ——${poemObj.author}`;
+            }
+            return line;
+        }).join('\n\n');
         
         try {
             // 使用现代剪贴板API
@@ -502,11 +563,15 @@ class PoemGenerator {
             return;
         }
         
-        // 创建文件内容
+        // 创建文件内容，包含作者信息
         const header = `丁字裤圣旨大全\n生成时间：${new Date().toLocaleString()}\n总计：${this.poems.length} 条圣旨\n${'='.repeat(50)}\n\n`;
-        const content = this.poems.map((poem, index) => 
-            `${String(index + 1).padStart(3, '0')}. ${poem}`
-        ).join('\n\n');
+        const content = this.poems.map((poemObj, index) => {
+            let line = `${String(index + 1).padStart(3, '0')}. ${poemObj.text}`;
+            if (poemObj.author) {
+                line += ` ——${poemObj.author}`;
+            }
+            return line;
+        }).join('\n\n');
         const fileContent = header + content;
         
         // 创建并下载文件
@@ -743,4 +808,4 @@ document.addEventListener('visibilitychange', () => {
     } else {
         console.log('页面变为隐藏状态');
     }
-}); 
+});

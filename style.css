@@ -223,6 +223,7 @@ h1 {
     margin: 25px 0;
     min-height: 120px;
     display: flex;
+    flex-direction: column; /* (*** 已修改 ***) 允许作者在下方显示 */
     align-items: center;
     justify-content: center;
     position: relative;
@@ -264,6 +265,7 @@ h1 {
     max-width: 100%;
     word-wrap: break-word;
     animation: crtDistortion 0.3s ease-in-out infinite;
+    width: 100%; /* (*** 已修改 ***) 确保容器占满宽度 */
 }
 
 /* 按钮样式 */
@@ -478,6 +480,19 @@ h1 {
         font-size: 13px;
         letter-spacing: 1px;
         line-height: 1.6;
+    }
+    
+    /* (*** 新增 ***) */
+    .poem-author {
+        font-size: 12px;
+        margin-top: 10px;
+        padding-right: 5px;
+    }
+
+    /* (*** 新增 ***) */
+    .poem-item-author {
+        font-size: 10px;
+        margin-top: 8px;
     }
     
     .generate-btn {
@@ -839,6 +854,19 @@ h1 {
     border-radius: 0;
     background: rgba(139, 69, 19, 0.2);
     animation: poemGlow 3s ease-in-out infinite, crtGlow 1.5s ease-in-out infinite;
+}
+
+/* (*** 新增 ***) 圣旨作者样式 (Main Display) */
+.poem-author {
+    color: #DEB887; /* A lighter, less prominent color */
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 0px #8B4513;
+    text-align: right;
+    margin-top: 15px;
+    padding-right: 10px;
+    animation: pixelFadeIn 0.3s ease-in; /* Match fade-in */
+    width: 100%;
 }
 
 @keyframes poemGlow {
@@ -1254,6 +1282,19 @@ h1 {
         font-size: 12px;
         letter-spacing: 0.5px;
         padding: 6px 10px;
+    }
+    
+    /* (*** 新增 ***) */
+    .poem-author {
+        font-size: 11px;
+        margin-top: 8px;
+        padding-right: 0;
+    }
+
+    /* (*** 新增 ***) */
+    .poem-item-author {
+        font-size: 9px;
+        margin-top: 6px;
     }
     
     .generate-btn {
@@ -2001,6 +2042,17 @@ h1 {
     word-break: break-all;
 }
 
+/* (*** 新增 ***) 圣旨作者样式 (Modal List) */
+.poem-item-author {
+    color: #DEB887;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-shadow: 1px 1px 0px var(--text-shadow);
+    text-align: right;
+    margin-top: 10px;
+    padding-right: 5px;
+}
+
 .modal-feedback {
     position: absolute;
     top: -50px;
@@ -2051,4 +2103,4 @@ h1 {
         transform: translateX(-50%) translateY(0);
         opacity: 1;
     }
-} 
+}
